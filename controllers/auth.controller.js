@@ -175,7 +175,7 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
     const {token}= req.params;
     const resetPasswordToken = crypto
     .createHash("sha256")
-    .update(req.params.token)
+    .update(token)
     .digest("hex");
     const user = await User.findOne({
         resetPasswordToken,
@@ -202,8 +202,11 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const updatePassword = catchAsyncErrors(async (req, res, next) => { 
+  console.log(req.body)
     try {
+
         const user = await User.findById(req.user._id).select("+password"); 
+      
         const {oldPassword,newPassword,confirmNewPassword} = req.body;
         if (!oldPassword || !newPassword || !confirmNewPassword) {
             return next(new ErrorHandler("Please enter all fields", 400));
