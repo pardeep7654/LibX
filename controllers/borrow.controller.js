@@ -24,7 +24,9 @@ try {
 export const recordBorrowedBook=catchAsyncErrors(async(req,res,next)=>{
     try {
           const {id}=req.params;
+          console.log(id)
           const {email}=req.body;
+
           const book=await Books.findById(id);
           if(!book){
               return next(new ErrorHandler("Book not found",404));
@@ -37,7 +39,7 @@ export const recordBorrowedBook=catchAsyncErrors(async(req,res,next)=>{
                return next(new ErrorHandler("Book not available",400));
             
            } 
-           const isAlreadyBorrowed=user.borrowedBooks.find(b=>b.book.toString()===id && b.returned===false);
+           const isAlreadyBorrowed=user.borrowedBooks.find(b=>b.bookId.toString()===id && b.returned===false);
            if(isAlreadyBorrowed){
                return next(new ErrorHandler("Book already borrowed",400));
            }
